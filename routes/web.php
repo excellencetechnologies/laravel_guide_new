@@ -25,4 +25,8 @@ Route::get('/info/{id}/{page?}', function($id, $page = null){
     } else {
         return 'This is ' . $page . ' page with and id ' . $id;
     }
+})->name('infopage');
+
+Route::get('/v1/info', function(){
+    return redirect()->route('infopage', ['id' => 1, 'page' => 'login']);
 });
