@@ -18,3 +18,11 @@ Route::get('/', function () {
 Route::get('/ping', function(){
     return 'Pong';
 });
+
+Route::get('/info/{id}/{page?}', function($id, $page = null){
+    if (!$page) {
+        return 'This is the page with an id ' . $id;
+    } else {
+        return 'This is ' . $page . ' page with and id ' . $id;
+    }
+});
