@@ -36,3 +36,8 @@ Route::get('/user', function(){
 });
 
 Route::resource('/userdata', 'UserController');
+
+Route::get('/user/{id}', function($id){
+    $users = DB::table('user_datas')->where('id', $id)->get();
+    return $users; 
+});
