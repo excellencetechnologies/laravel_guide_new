@@ -30,3 +30,9 @@ Route::get('/info/{id}/{page?}', function($id, $page = null){
 Route::get('/v1/info', function(){
     return redirect()->route('infopage', ['id' => 1, 'page' => 'login']);
 });
+
+Route::get('/user', function(){
+    return view('userdata');
+});
+
+Route::resource('/userdata', 'UserController');
