@@ -16,7 +16,6 @@
     <body>
 
         <div class="container">
-            @include('inc.message')
             <h1>User Form</h1>
             <form action="{{ action('UserController@store') }}" method="post">
                 {{ csrf_field() }}
