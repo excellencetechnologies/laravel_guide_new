@@ -1,5 +1,6 @@
 <?php
 use App\UserData;
+use App\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 /*
@@ -50,4 +51,21 @@ Route::post("/user", function(){
 Route::get('/user/{id}', function($id){
     $users = DB::table('login_users')->where('id', $id)->get();
     return $users;
+});
+
+Route::post('/user/{id}', function($id){
+    $users = DB::table('login_users')->where('id', $id)->get();
+
+    if(count($users) > 0){
+        $data = new Profile();
+        $data->user_id = $id;
+        $data->address = Input::get('address');
+        $data->postal_code = Input::get('postcode');
+        $data->phone = Input::get('phone');
+        $data->save();
+        return $data;
+        
+    } else {
+        return "User doesn't exist";
+    }
 });
