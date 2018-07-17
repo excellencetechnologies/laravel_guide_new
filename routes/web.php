@@ -1,5 +1,7 @@
 <?php
-
+use App\UserData;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -29,4 +31,23 @@ Route::get('/info/{id}/{page?}', function($id, $page = null){
 
 Route::get('/v1/info', function(){
     return redirect()->route('infopage', ['id' => 1, 'page' => 'login']);
+});
+
+Route::get("/user", function(){
+    return "hello";
+});
+
+Route::post("/user", function(){
+    $data = new UserData();
+    $data->firstname = Input::get('fname');
+    $data->lastname = Input::get('lname');
+    $data->email = Input::get('email');
+    $data->password = Input::get('pass');
+    $data->save();
+    return $data;
+});
+
+Route::get('/user/{id}', function($id){
+    $users = DB::table('login_users')->where('id', $id)->get();
+    return $users;
 });
