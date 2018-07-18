@@ -1,7 +1,5 @@
 <?php
-use App\UserData;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,10 +15,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Ping Pong
 Route::get('/ping', function(){
     return 'Pong';
 });
 
+// Named Route with optional parameters
 Route::get('/info/{id}/{page?}', function($id, $page = null){
     if (!$page) {
         return 'This is the page with an id ' . $id;
@@ -29,6 +29,7 @@ Route::get('/info/{id}/{page?}', function($id, $page = null){
     }
 })->name('infopage');
 
+// Redirect to named route
 Route::get('/v1/info', function(){
     return redirect()->route('infopage', ['id' => 1, 'page' => 'login']);
 });
@@ -37,17 +38,20 @@ Route::get("/user", function(){
     return "hello";
 });
 
-Route::post("/user", function(){
-    $data = new UserData();
-    $data->firstname = Input::get('fname');
-    $data->lastname = Input::get('lname');
-    $data->email = Input::get('email');
-    $data->password = Input::get('pass');
-    $data->save();
-    return $data;
-});
+// Creating User
+Route::post("/user", 'UserController@createUser');
 
-Route::get('/user/{id}', function($id){
-    $users = DB::table('login_users')->where('id', $id)->get();
-    return $users;
-});
+// Fetching User Details
+Route::get('/user/{id}', 'UserController@showUser');
+
+// Creating User Profile
+Route::post('/user/{id}', 'UserController@createUserProfile');
+
+// Updating User Profile
+Route::put('/profile/{id}', 'UserController@updateUserProfile');
+
+// Deleting User Profile
+Route::delete('/user/profile/{id}', 'UserController@deleteUserProfile');
+
+// Fetching User Profile
+Route::get('/user/{id}/full', 'UserController@showUserProfile');
