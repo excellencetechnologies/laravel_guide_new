@@ -55,3 +55,9 @@ Route::delete('/user/profile/{id}', 'UserController@deleteUserProfile');
 
 // Fetching User Profile
 Route::get('/user/{id}/full', 'UserController@showUserProfile');
+
+// Register User
+Route::post('/register', 'UserController@registerUser');
+
+// Login User
+Route::post('/login', 'UserController@loginUser');

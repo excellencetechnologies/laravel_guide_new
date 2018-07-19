@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use DB;
+use App\User;
 use App\UserData;
 use App\Profile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
 
 class UserController extends Controller
 {
@@ -118,5 +121,41 @@ class UserController extends Controller
         return $user_profile;
     }
 
+    // Register User
+    public function registerUser(Request $request)
+    {
+        $this->validate($request, [
+            'name' => 'required',
+            'email' => 'required',
+            'password' => 'required|confirmed|min:6'
+        ]);
+        
+        $user_email = $request->input('email');        
+        $user = DB::table('users')->where('email', $user_email)->count();
+
+        if($user == 0) {
+            $register_user = new User();
+            $register_user->name = $request->input('name');
+            $register_user->email = $user_email;
+            $register_user->password = bcrypt($request->input('password'));
+            $register_user->save();
+            return $register_user;
+
+        } else {
+            return "User Exist.";
+        }
+    }
+
+    // Login Authentication
+    public function loginUser(Request $request)
+    {
+        $credentials = $request->only('email', 'password');
+
+        if(Auth::attempt($credentials)){
+            return "Login Successfull";
+        } else {
+            return "Login Failed";
+        }
+    }
     
 }
