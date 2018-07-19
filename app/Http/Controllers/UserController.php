@@ -150,11 +150,13 @@ class UserController extends Controller
     public function loginUser(Request $request)
     {
         $credentials = $request->only('email', 'password');
-        $remember_token = true;
+        $api_token = str_random(60);
 
-        if(Auth::attempt($credentials, $remember_token)){
-            $token = DB::table('users')->select('remember_token')->where('id', auth()->id())->get();
-            return $token; 
+        if(Auth::attempt($credentials)){
+            $user = User::find(auth()->id());
+            $user->api_token = $api_token;
+            $user->save();
+            return $user;
             
         } else {
             return "Login Failed";
@@ -165,9 +167,9 @@ class UserController extends Controller
     public function updateUserWithToken(Request $request)
     {
         $id = auth()->id();
-        $remember_token = $request->input('token');
+        $api_token = $request->input('token');
         $email = $request->input('email');
-        $user_token = DB::table('users')->select('email')->where('id', $id)->where('remember_token', $remember_token)->count();        
+        $user_token = DB::table('users')->select('email')->where('id', $id)->where('api_token', $api_token)->count();
         
         if($user_token > 0){
             $user = User::find($id);  
