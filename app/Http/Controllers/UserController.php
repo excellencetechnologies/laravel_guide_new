@@ -150,9 +150,12 @@ class UserController extends Controller
     public function loginUser(Request $request)
     {
         $credentials = $request->only('email', 'password');
+        $remember_token = true;
 
-        if(Auth::attempt($credentials)){
-            return "Login Successfull";
+        if(Auth::attempt($credentials, $remember_token)){
+            $token = DB::table('users')->select('remember_token')->where('id', auth()->id())->get();
+            return $token; 
+            
         } else {
             return "Login Failed";
         }
