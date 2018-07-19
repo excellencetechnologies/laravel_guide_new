@@ -161,4 +161,22 @@ class UserController extends Controller
         }
     }
     
+    // Update User With Token
+    public function updateUserWithToken(Request $request)
+    {
+        $id = auth()->id();
+        $remember_token = $request->input('token');
+        $email = $request->input('email');
+        $user_token = DB::table('users')->select('email')->where('id', $id)->where('remember_token', $remember_token)->count();        
+        
+        if($user_token > 0){
+            $user = User::find($id);  
+            $user->email = $email;
+            $user->save();
+            return $user;
+
+        } else {
+            return 'Token mismatch';
+        }
+    }
 }
